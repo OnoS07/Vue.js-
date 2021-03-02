@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ch-2</title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <!-- v-for 要素 in 配列　で配列内の要素をひとつずつ入れていく　セットで一意の要素を指定する v-bind:key も必要 -->
+            <li v-for="item in items" v-bind:key="item.name">
+                {{item.name}}の個数:
+                <!-- v-on:input inputのイベントが発生した時に発火する　個数がインプットされた値になる -->
+                <!-- v-on:change ならリアルタイムではなく数字が入力欄から外され時に発火される -->
+                <!-- v-model ならbindなしでもひとつで双方向(ビュー側とインスタンス側)のバインディングができる -->
+                <input type="number" v-model="item.amount" min="0">
+            </li>
+        </ul>
+        <hr>
+        <div v-bind:style="errorMessageClass">
+            <ul>
+                <li v-for="item in items" v-bind:key="item.name">
+                    {{item.name}}: {{item.price}}円 * {{item.amount}}個 = {{item.price * item.amount | numberWithDelimiter}}円
+                </li>
+            </ul>
+        </div>
+        <!-- 算出プロパティとしてdataを加工した関数も使用できる -->
+        <!-- 値 | フィルタ　でfiltersオプションが適用できる。numberWithDelimiterについてはjsファイルで関数作成する -->
+        <p>合計金額: {{totalPrice | numberWithDelimiter}}</p>
+        <p>税込金額: {{totalPriceWithTax | numberWithDelimiter}}</p>
+        <!-- v-show true(買えない)なら表示、そうでなければ非表示 -->
+        <!-- v-show:class trueならそのclassが反映される。そのclassの内容は関数で実施もできる -->
+        <p v-show="!canBuy" v-bind:class="errorMessageClass">
+            {{1000|numberWithDelimiter}}円以上から購入できます
+        </p>
+        
+        <!-- v-bind:title 属性にtitleを指定　このDOM要素をホバーするとイコールの先の文字列が表示される -->
+        <!-- v-bind:disabled 属性にdisabledを指定　trueで無効に、falseの場合は無効にならない -->
+        <button v-bind:disabled="!canBuy" v-on:click="doBuy">購入</button>
+    </div>
+
+<script src="./app.js"></script>
+</body>
+</html>
+
+ 
+
